@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <time.h>
 
 #include <alsa/asoundlib.h>
 #include <alsa/mixer.h>
@@ -19,6 +20,12 @@ void sigint_handler()
 	keep_running = 0;
 }
 
+long get_clock(void) {
+	clock_t s = clock(),e;
+	sleep(2);
+	e = clock();
+	return (e - s)/2;
+}
 
 int main()
 {
@@ -28,6 +35,7 @@ int main()
 	long uptime, alsa_vol_unit;
 	static char status[100];
 	struct sysinfo s_info;
+	ssize_t mem_used;
 
 	/* display number */
 	int screen_default_nbr;
@@ -57,9 +65,9 @@ int main()
 
 		if (counter >= STATUS_REFRESH_RATE_LOW) {
 			counter = 0;
-
 			/* setup sysinfo with values */
 			sysinfo(&s_info);
+			mem_used = memused(&s_info);
 
 			/* get the uptime of machine in minutes */
 			uptime = s_info.uptime / 60;
@@ -74,9 +82,7 @@ int main()
 			system_time = unixtime();
 		}
 
-		snprintf(status, sizeof(status),
-			"%s \u2502 %0.02fGHz \u2502 %u\u00B0C \u2502 [%s] \u2502 vol: %d \u2502 %d:%02d \u2502 %s ",
-			network_status(), cpufreq(), cputemp(), battery_status, volume, up_hours, up_minutes, system_time);
+		snprintf(status, sizeof(status), "%s \u2502 %0.02fGHz \u2502  vol: %d \u2502 %s \u2502 %s \u2502 %ld counts \u2502 memused:%5.1ld MB", network_status(), cpufreq(), volume, system_time, "aissy", get_clock(), mem_used);
 
 		/* changed root window name */
 		xcb_change_property(connection,

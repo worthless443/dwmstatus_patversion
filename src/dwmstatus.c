@@ -196,7 +196,7 @@ char *power_status()
 	static int ac_on;
 
 	FILE *fp;
-	if ((fp = fopen(BAT_CAPFILE, "r")) == NULL) {
+	if (!(fp = fopen(BAT_CAPFILE, "r"))) {
 		return "AC";
 	}
 
