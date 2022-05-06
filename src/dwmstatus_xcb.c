@@ -66,7 +66,7 @@ int main()
 		if (counter >= STATUS_REFRESH_RATE_LOW) {
 			counter = 0;
 			/* setup sysinfo with values */
-			sysinfo(&s_info);
+			initialize_sysinfo(&s_info);
 			mem_used = memused(&s_info);
 
 			/* get the uptime of machine in minutes */
@@ -82,7 +82,7 @@ int main()
 			system_time = unixtime();
 		}
 
-		snprintf(status, sizeof(status), "%s \u2502 %0.02fGHz \u2502  vol: %d \u2502 %s \u2502 %s \u2502 %ld counts \u2502 memused:%5.1ld MB", network_status(), cpufreq(), volume, system_time, "aissy", get_clock(), mem_used);
+		snprintf(status, sizeof(status), "%s \u2502 %0.02fGHz \u2502   %s \u2502 %s \u2502 %ld counts \u2502 memused:%5.1ld GiB \u2502 %ld", network_status(), cpufreq(), system_time, "aissy", get_clock(), mem_used - 2, real_unixtime());
 
 		/* changed root window name */
 		xcb_change_property(connection,

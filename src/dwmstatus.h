@@ -18,7 +18,7 @@ void initialize_sysinfo(struct sysinfo *s_info);
  * --/-- - no connection to network
  */
 char *network_status();
-
+ 
 /**
  * get and return the current amount of free ram in KBs
  */
@@ -34,6 +34,7 @@ unsigned long memtotal(struct sysinfo *s_info);
  */
 unsigned long memused(struct sysinfo *s_info);
 
+long real_unixtime();
 long alsa_get_max_vol(snd_mixer_t *handle);
 snd_mixer_t *create_alsa_handle();
 unsigned int alsa_volume(snd_mixer_t *handle);

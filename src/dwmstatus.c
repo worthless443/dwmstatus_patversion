@@ -75,9 +75,10 @@ unsigned long memtotal(struct sysinfo *s_info)
  */
 unsigned long memused(struct sysinfo *s_info)
 {
-	unsigned long total_mem = memtotal(s_info);
-	unsigned long free_mem = memfree(s_info);
+	unsigned long total_mem = memtotal(s_info) / (1<<30);
+	unsigned long free_mem = memfree(s_info) / (1<<30);
 	unsigned long used_mem = total_mem - free_mem;
+	printf("%ld", used_mem);
 	return used_mem;
 }
 
@@ -227,6 +228,12 @@ char *power_status()
  * get and return an array of chars representing the time of the system:
  * day_of_week month/day  hour:minutes
  */
+long real_unixtime()
+{
+	static time_t date = 0;
+	time(&date);
+	return date;
+}
 char *unixtime()
 {
 	static char time_buf[22];
